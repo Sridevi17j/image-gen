@@ -67,6 +67,8 @@
                 }
 
                 const data = await response.json();
+                console.log('Raw response:', data);
+                img.alt = data;
                 const imageUrl = data.images[0].url;
 
                 const img = document.createElement('img');
