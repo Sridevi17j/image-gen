@@ -13,7 +13,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/generate', methods=['POST'])
-def generate_image():
+async def generate_image():
     FAL_KEY =  "9e6ce8aa-6f71-48b8-9471-0ec870235e8a:22fbcccc7b6c8fbf6ff36db6396aa3a7"
     data = request.json
     prompt = data.get('prompt')
