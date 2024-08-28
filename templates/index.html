@@ -3,54 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Image Generator</title>
+    <title>Greeting Card Generator</title>
     <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --background-color: #ecf0f1;
+            --text-color: #34495e;
+            --error-color: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Garamond, serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f0f4f8;
+            padding: 0 20px;
+            width: 100%;
         }
-        label[for="prompt"] {
-            font-size: 1.2em; /* Increased font size */
-            display: block; /* Ensures the label is on its own line */
-            margin-bottom: 5px; /* Adds some space below the label */
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            display: flex;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+            font-size: 1.75rem; /* Adjusted size to be slightly smaller */
+        }
+        
+        #promptForm {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            font-size: 1.2em;
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
         textarea {
             width: 100%;
             height: 100px;
-            font-family: Arial, sans-serif;
-            margin-bottom: 10px; /* Adds some space below the textarea */
+            font-family: inherit;
+            padding: 0.5rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 1rem;
         }
-        button[type="submit"] {
-            font-family: Garamond, serif; /* Matches the body font */
-            font-size: 1em; /* Matches the default body text size */
-            padding: 5px 10px; /* Adds some padding to the button */
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        #result {
-            margin-top: 20px;
+        
+        button:hover {
+            background-color: #2980b9;
         }
+        
+        #result, #error {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        #error {
+            color: var(--error-color);
+            font-weight: bold;
+        }
+        
         img {
             max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+        
+        #downloadBtn {
+            display: none;
+            margin-top: 1rem;
+            background-color: #27ae60;
+        }
+        
+        #downloadBtn:hover {
+            background-color: #2ecc71;
         }
     </style>
 </head>
 <body>
-    <h1>AI Image Generator</h1>
-    <form id="promptForm">
-        <label for="prompt">Enter your prompt:</label>
-        <textarea id="prompt" name="prompt" required></textarea>
-        <button type="submit">Generate Image</button>
-    </form>
-    <div id="result"></div>
+    <header>
+        <div class="container">
+            <div class="logo">Greeting Card Generator</div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1>Greetings Reimagined... Your Greeting Card Awaits!!!</h1>
+        <form id="promptForm">
+            <label for="prompt">Enter your greeting card prompt</label>
+            <textarea id="prompt" name="prompt" required placeholder="e.g., Generate a Birthday Greeting Card with words 'Happy Birthday Sam'"></textarea>
+            <button type="submit">Generate Greeting Card</button>
+        </form>
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Generating greeting card...</p>
+        </div>
+        <div id="error"></div>
+        <div id="result"></div>
+        <button id="downloadBtn" style="display: none;">Download Greeting Card</button>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Greeting Card AI Generator. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
+        const greetingCardKeywords = ['card', 'greeting', 'birthday', 'anniversary', 'wedding', 'congratulations', 'thank you', 'get well', 'sympathy', 'holiday', 'christmas', 'new year', 'easter', 'valentine'];
+
+        function isGreetingCardPrompt(prompt) {
+            return greetingCardKeywords.some(keyword => prompt.toLowerCase().includes(keyword));
+        }
+
         document.getElementById('promptForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const prompt = document.getElementById('prompt').value;
+            const loadingDiv = document.getElementById('loading');
             const resultDiv = document.getElementById('result');
-            resultDiv.textContent = 'Generating image...';
+            const errorDiv = document.getElementById('error');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            errorDiv.textContent = '';
+            resultDiv.innerHTML = '';
+            downloadBtn.style.display = 'none';
+
+            if (!isGreetingCardPrompt(prompt)) {
+                errorDiv.textContent = 'Please enter a greeting card related prompt.';
+                return;
+            }
+
+            loadingDiv.style.display = 'block';
 
             try {
                 const response = await fetch('/generate', {
@@ -71,15 +257,36 @@
 
                 const img = document.createElement('img');
                 img.src = imageUrl;
-                img.alt = 'Generated image';
-
-                resultDiv.innerHTML = '';
-                resultDiv.appendChild(img);
+                img.alt = 'Generated greeting card';
+                img.onload = () => {
+                    loadingDiv.style.display = 'none';
+                    resultDiv.appendChild(img);
+                    downloadBtn.style.display = 'inline-block';
+                    downloadBtn.onclick = () => downloadImage(imageUrl, 'greeting_card.png');
+                };
             } catch (error) {
                 console.error('Error:', error);
-                resultDiv.textContent = `An error occurred: ${error.message}`;
+                loadingDiv.style.display = 'none';
+                errorDiv.textContent = `An error occurred: ${error.message}`;
             }
         });
+
+        function downloadImage(url, filename) {
+            fetch(url)
+                .then(response => response.blob())
+                .then(blob => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                })
+                .catch(error => {
+                    console.error('Download failed:', error);
+                    alert('Download failed. Please try again.');
+                });
+        }
     </script>
 </body>
 </html>
