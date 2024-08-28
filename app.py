@@ -14,7 +14,6 @@ def index():
 
 @app.route('/generate', methods=['POST'])
 async def generate_image():
-    FAL_KEY =  "9e6ce8aa-6f71-48b8-9471-0ec870235e8a:22fbcccc7b6c8fbf6ff36db6396aa3a7"
     data = request.json
     prompt = data.get('prompt')
 
@@ -22,19 +21,20 @@ async def generate_image():
         return jsonify({'error': 'No prompt provided'}), 400
 
     try:
-        handler = fal_client.submit(
+        result = fal_client.submit(
             "fal-ai/flux-pro",
             arguments={
                 "prompt": prompt
             },
-        )
+        ).get()
+        time.sleep(10)
 
         # Assume the result is the image in binary format or base64
-        result =  handler.get()
+        return jsonify(result)
 
-        if result:
+        #if result:
             # Assuming result is a dictionary with image information
-            return jsonify(result)
+         #   return jsonify(result)
         else:
             return jsonify({'error': 'No image generated'}), 500
     except Exception as e:
