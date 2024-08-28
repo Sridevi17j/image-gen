@@ -27,7 +27,7 @@ async def generate_image():
                 "prompt": prompt
             },
         ).get()
-        time.sleep(10)
+        #time.sleep(10)
 
         # Assume the result is the image in binary format or base64
         return jsonify(result)
